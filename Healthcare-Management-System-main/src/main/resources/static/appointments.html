@@ -1,0 +1,668 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Stack | Appointments</title>
+
+<style>
+:root {
+    --primary: #0f9f91;
+    --dark: #163b4d;
+    --bg: #f3f8fa;
+    --muted: #718096;
+}
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: #263746;
+}
+
+header {
+    background: white;
+    padding: 18px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid #e4edf0;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    background: var(--primary);
+    color: white;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 23px;
+}
+
+h1, h2, p { margin-top: 0; }
+
+header h1 {
+    margin-bottom: 4px;
+    color: var(--dark);
+    font-size: 22px;
+}
+
+header p {
+    margin-bottom: 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+nav {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--dark);
+    padding: 10px 14px;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+nav a.active, nav a:hover {
+    background: #e2f7ef;
+    color: #087f69;
+}
+
+main {
+    max-width: 1150px;
+    margin: 35px auto;
+    padding: 0 22px;
+}
+
+.welcome { margin-bottom: 25px; }
+
+.welcome h2 {
+    color: var(--dark);
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.muted { color: var(--muted); }
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.stat, .panel {
+    background: white;
+    padding: 23px;
+    border-radius: 16px;
+    border: 1px solid #e8eff2;
+    box-shadow: 0 5px 20px #163b4d08;
+}
+
+.stat span {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.stat strong {
+    display: block;
+    font-size: 29px;
+    margin-top: 10px;
+    color: var(--dark);
+}
+
+.content {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.5fr);
+    gap: 22px;
+    align-items: start;
+}
+
+.panel h2 {
+    color: var(--dark);
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.panel > p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 22px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 15px 0 7px;
+}
+
+input, select {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #dbe5e9;
+    border-radius: 9px;
+    background: #fbfdfe;
+    font-size: 14px;
+    outline: none;
+    color: #263746;
+}
+
+input:focus, select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px #0f9f9118;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+button {
+    border: 0;
+    cursor: pointer;
+    background: var(--primary);
+    color: white;
+    border-radius: 9px;
+    padding: 13px 17px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+button:hover { background: #0b8277; }
+button:disabled { opacity: .6; cursor: wait; }
+
+.submit {
+    width: 100%;
+    margin-top: 22px;
+}
+
+.message {
+    margin-top: 14px;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
+}
+
+.table-wrap {
+    overflow-x: auto;
+    margin-top: 18px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+th {
+    background: #f3f8fa;
+    color: #607681;
+    text-align: left;
+    font-weight: 600;
+}
+
+th, td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #edf1f3;
+}
+
+.empty {
+    color: var(--muted);
+    text-align: center;
+    padding: 28px 5px;
+}
+
+.status {
+    display: inline-block;
+    padding: 5px 9px;
+    background: #e2f7ef;
+    color: #087f69;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 12px;
+    padding: 30px 15px;
+}
+
+@media(max-width: 850px) {
+    .content { grid-template-columns: 1fr; }
+    .stats { grid-template-columns: 1fr; gap: 12px; }
+}
+
+@media(max-width: 550px) {
+    header {
+        padding: 16px;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    main { padding: 0 14px; margin-top: 24px; }
+    .welcome h2 { font-size: 23px; }
+    .row { grid-template-columns: 1fr; gap: 0; }
+}
+</style>
+</head>
+
+<body>
+<header>
+    <div class="brand">
+        <div class="logo">✚</div>
+        <div>
+            <h1>Health Stack</h1>
+            <p>Healthcare Management System</p>
+        </div>
+    </div>
+
+    <nav>
+        <a href="/">Patient Dashboard</a>
+        <a href="/appointments.html" class="active">Appointments</a>
+    </nav>
+</header>
+
+<main>
+    <section class="welcome">
+        <h2>Appointments Dashboard</h2>
+        <p class="muted">Schedule and manage patient appointments in one place.</p>
+    </section>
+
+    <section class="stats">
+        <div class="stat">
+            <span>📅 &nbsp; Total Appointments</span>
+            <strong id="totalAppointments">—</strong>
+        </div>
+
+        <div class="stat">
+            <span>👥 &nbsp; Registered Patients</span>
+            <strong id="totalPatients">—</strong>
+        </div>
+
+        <div class="stat">
+            <span>🛡️ &nbsp; System Status</span>
+            <strong style="font-size:22px;color:#0f9f91">Active</strong>
+            <span>Appointment management</span>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="panel">
+            <h2>Book Appointment</h2>
+            <p>Enter the appointment details below.</p>
+
+            <form id="apptForm">
+                <label for="patientSelect">Select Patient *</label>
+                <select id="patientSelect" required>
+                    <option value="">Loading patients...</option>
+                </select>
+
+                <label for="provider">Doctor Name *</label>
+                <input
+                    id="provider"
+                    type="text"
+                    placeholder="Dr. Sharma"
+                    maxlength="100"
+                    required
+                >
+
+                <div class="row">
+                    <div>
+                        <label for="start">Start Time *</label>
+                        <input id="start" type="datetime-local" required>
+                    </div>
+
+                    <div>
+                        <label for="end">End Time *</label>
+                        <input id="end" type="datetime-local" required>
+                    </div>
+                </div>
+
+                <button class="submit" id="bookBtn" type="submit">
+                    + Book Appointment
+                </button>
+            </form>
+
+            <div id="apptMsg" class="message" role="status" aria-live="polite"></div>
+        </div>
+
+        <div class="panel">
+            <h2>Appointment Records</h2>
+            <p>View and search scheduled appointments.</p>
+
+            <input
+                id="search"
+                type="search"
+                placeholder="Search patient or doctor..."
+                aria-label="Search appointments"
+            >
+
+            <div id="apptsContainer" class="table-wrap">
+                <div class="empty">Loading appointments...</div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>Health Stack · Healthcare Management System</footer>
+
+<script>
+const apiBase = "/api";
+
+let allAppointments = [];
+let patientsLoaded = false;
+
+const appointmentForm = document.getElementById("apptForm");
+const patientSelect = document.getElementById("patientSelect");
+const bookButton = document.getElementById("bookBtn");
+const messageElement = document.getElementById("apptMsg");
+const appointmentsContainer = document.getElementById("apptsContainer");
+
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[char]);
+}
+
+function showMsg(message, isError = false) {
+    messageElement.textContent = message;
+    messageElement.style.color = isError ? "#b91c1c" : "#087f69";
+}
+
+async function getErrorMessage(response) {
+    const text = await response.text();
+
+    if (!text) {
+        return `Request failed with status ${response.status}`;
+    }
+
+    try {
+        const body = JSON.parse(text);
+        return body.message || body.error || text;
+    } catch {
+        return text;
+    }
+}
+
+async function loadPatientsIntoSelect() {
+    patientSelect.innerHTML =
+        '<option value="">Loading patients...</option>';
+
+    try {
+        const response = await fetch(`${apiBase}/patients`);
+
+        if (!response.ok) {
+            throw new Error(await getErrorMessage(response));
+        }
+
+        const data = await response.json();
+        const patients = Array.isArray(data) ? data : [];
+
+        document.getElementById("totalPatients").textContent = patients.length;
+
+        patientSelect.innerHTML =
+            '<option value="">-- Select patient --</option>';
+
+        patients.forEach(patient => {
+            const option = document.createElement("option");
+            option.value = patient.id;
+            option.textContent = `${patient.name} (ID: ${patient.id})`;
+            patientSelect.appendChild(option);
+        });
+
+        if (patients.length === 0) {
+            patientSelect.innerHTML =
+                '<option value="">Register a patient first</option>';
+        }
+
+        patientsLoaded = true;
+    } catch (error) {
+        patientsLoaded = false;
+        patientSelect.innerHTML =
+            '<option value="">Unable to load patients</option>';
+
+        document.getElementById("totalPatients").textContent = "—";
+        showMsg("Could not load patients: " + error.message, true);
+    }
+}
+
+function formatDateTime(value) {
+    if (!value) return "—";
+
+    // Handles common LocalDateTime responses such as 2026-10-14T10:30:00.
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return value;
+    }
+
+    return date.toLocaleString();
+}
+
+async function fetchAppointments() {
+    appointmentsContainer.innerHTML =
+        '<div class="empty">Loading appointments...</div>';
+
+    try {
+        const response = await fetch(`${apiBase}/appointments`);
+
+        if (!response.ok) {
+            throw new Error(await getErrorMessage(response));
+        }
+
+        const data = await response.json();
+        allAppointments = Array.isArray(data) ? data : [];
+
+        document.getElementById("totalAppointments").textContent =
+            allAppointments.length;
+
+        renderAppointments();
+    } catch (error) {
+        appointmentsContainer.innerHTML = `
+            <div class="empty">
+                Unable to load appointments.<br>
+                ${escapeHtml(error.message)}
+            </div>`;
+
+        document.getElementById("totalAppointments").textContent = "—";
+    }
+}
+
+function renderAppointments() {
+    const query = document.getElementById("search").value
+        .trim()
+        .toLowerCase();
+
+    const filtered = allAppointments.filter(appointment => {
+        const searchableValues = [
+            appointment.id,
+            appointment.patient?.name,
+            appointment.provider,
+            appointment.status
+        ];
+
+        return searchableValues.some(value =>
+            String(value ?? "").toLowerCase().includes(query)
+        );
+    });
+
+    if (filtered.length === 0) {
+        appointmentsContainer.innerHTML = `
+            <div class="empty">
+                ${allAppointments.length === 0
+                    ? "No appointments yet. Book your first appointment."
+                    : "No appointments match your search."}
+            </div>`;
+        return;
+    }
+
+    const rows = filtered.map(appointment => `
+        <tr>
+            <td>${escapeHtml(appointment.id)}</td>
+            <td>${escapeHtml(appointment.patient?.name ?? "Unknown")}</td>
+            <td>${escapeHtml(appointment.provider)}</td>
+            <td>${escapeHtml(formatDateTime(appointment.startTime))}</td>
+            <td>${escapeHtml(formatDateTime(appointment.endTime))}</td>
+            <td>
+                <span class="status">
+                    ${escapeHtml(appointment.status || "Scheduled")}
+                </span>
+            </td>
+        </tr>
+    `).join("");
+
+    appointmentsContainer.innerHTML = `
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+        </table>`;
+}
+
+document.getElementById("search").addEventListener("input", renderAppointments);
+
+appointmentForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    if (!appointmentForm.checkValidity()) {
+        appointmentForm.reportValidity();
+        return;
+    }
+
+    const patientId = patientSelect.value;
+    const provider = document.getElementById("provider").value.trim();
+    const start = document.getElementById("start").value;
+    const end = document.getElementById("end").value;
+
+    if (!patientsLoaded) {
+        showMsg("Patients have not loaded. Please refresh and try again.", true);
+        return;
+    }
+
+    if (!patientId) {
+        showMsg("Please select a patient.", true);
+        return;
+    }
+
+    if (!provider) {
+        showMsg("Please enter the doctor's name.", true);
+        return;
+    }
+
+    if (!start || !end) {
+        showMsg("Please select both start and end times.", true);
+        return;
+    }
+
+    if (new Date(start).getTime() >= new Date(end).getTime()) {
+        showMsg("End time must be after start time.", true);
+        return;
+    }
+
+    /*
+      datetime-local values are local wall-clock times.
+      Send them without converting to UTC so they are not shifted
+      by the browser's timezone. The Java backend should accept
+      the format used by its startTime/endTime fields.
+    */
+    const payload = {
+        patient: {
+            id: Number(patientId)
+        },
+        provider: provider,
+        startTime: start + ":00",
+        endTime: end + ":00"
+    };
+
+    bookButton.disabled = true;
+    bookButton.textContent = "Booking...";
+    showMsg("Submitting appointment...");
+
+    try {
+        const response = await fetch(`${apiBase}/appointments`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error(await getErrorMessage(response));
+        }
+
+        let created = null;
+
+        // Some APIs return an empty response after a successful POST.
+        const responseText = await response.text();
+
+        if (responseText) {
+            try {
+                created = JSON.parse(responseText);
+            } catch {
+                created = null;
+            }
+        }
+
+        // Reset the named form directly. Do not use event.currentTarget
+        // after an await, because it may no longer be available.
+        appointmentForm.reset();
+
+        showMsg(
+            created && created.id != null
+                ? `Appointment booked successfully! ID: ${created.id}`
+                : "Appointment booked successfully!"
+        );
+
+        await Promise.all([
+            loadPatientsIntoSelect(),
+            fetchAppointments()
+        ]);
+    } catch (error) {
+        showMsg("Could not book appointment: " + error.message, true);
+    } finally {
+        bookButton.disabled = false;
+        bookButton.textContent = "+ Book Appointment";
+    }
+});
+
+async function initializeDashboard() {
+    await Promise.all([
+        loadPatientsIntoSelect(),
+        fetchAppointments()
+    ]);
+}
+
+initializeDashboard();
+</script>
+</body>
+</html>
